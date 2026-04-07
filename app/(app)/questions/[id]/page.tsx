@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireAuth } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { BreadcrumbNav } from "@/components/breadcrumb-nav";
@@ -12,7 +12,8 @@ export default async function QuestionPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const user = await requireAuth();
+  const user = await getCurrentUser();
+  if (!user) return null;
 
   const question = await db.getQuestionById(id);
   if (!question) notFound();

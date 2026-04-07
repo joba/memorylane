@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getCurrentDbUser } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export async function createStory(
@@ -10,7 +10,7 @@ export async function createStory(
   blobUrls: string[],
   formData: FormData
 ): Promise<{ error: string } | void> {
-  const user = await getCurrentDbUser();
+  const user = await getCurrentUser();
   if (!user || user.role !== "ANSWERER") {
     return { error: "Behörighet saknas" };
   }

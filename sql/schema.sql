@@ -3,14 +3,15 @@
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-CREATE TYPE user_role AS ENUM ('QUESTIONER', 'ANSWERER');
+CREATE TYPE user_role AS ENUM ('QUESTIONER', 'ANSWERER', 'ADMIN');
 
 CREATE TABLE users (
-  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  clerk_id   TEXT NOT NULL UNIQUE,
-  name       TEXT NOT NULL,
-  role       user_role NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name          TEXT NOT NULL,
+  email         TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role          user_role NOT NULL,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE questions (
@@ -43,7 +44,6 @@ CREATE TABLE photos (
 
 CREATE INDEX photos_story_id_idx ON photos(story_id);
 
--- Auto-update updated_at on stories
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -55,3 +55,8 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER stories_updated_at
   BEFORE UPDATE ON stories
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- ─── First admin user ──────────────────────────────────────────────────────
+-- Replace the hash below with: node -e "const b=require('bcryptjs');b.hash('your-password',12).then(console.log)"
+-- INSERT INTO users (name, email, password_hash, role)
+-- VALUES ('Jon', 'jon@example.com', '$2a$12$...', 'ADMIN');

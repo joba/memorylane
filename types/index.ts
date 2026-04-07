@@ -1,11 +1,10 @@
-export type UserRole = "QUESTIONER" | "ANSWERER";
+export type UserRole = "QUESTIONER" | "ANSWERER" | "ADMIN";
 
 export interface User {
   id: string;
-  clerk_id: string;
   name: string;
+  email: string;
   role: UserRole;
-  created_at: string;
 }
 
 export interface Question {

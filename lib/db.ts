@@ -21,28 +21,53 @@ function getSql(): SqlFn {
   return _sql;
 }
 
+export interface DbUser extends User {
+  password_hash: string;
+  created_at: string;
+}
+
 export const db = {
-  async getUserByClerkId(clerkId: string): Promise<User | null> {
+  // ── Auth ────────────────────────────────────────────────────────────────
+
+  async getUserByEmail(email: string): Promise<DbUser | null> {
     const rows = await getSql()`
-      SELECT id, clerk_id, name, role, created_at
+      SELECT id, name, email, role, password_hash, created_at
       FROM users
-      WHERE clerk_id = ${clerkId}
+      WHERE email = ${email}
     `;
-    return (rows[0] as unknown as User) ?? null;
+    return (rows[0] as unknown as DbUser) ?? null;
+  },
+
+  // ── Admin ────────────────────────────────────────────────────────────────
+
+  async getAllUsers(): Promise<(User & { created_at: string })[]> {
+    const rows = await getSql()`
+      SELECT id, name, email, role, created_at
+      FROM users
+      ORDER BY created_at DESC
+    `;
+    return rows as unknown as (User & { created_at: string })[];
   },
 
   async createUser(data: {
-    clerkId: string;
     name: string;
+    email: string;
+    passwordHash: string;
     role: UserRole;
   }): Promise<User> {
     const rows = await getSql()`
-      INSERT INTO users (clerk_id, name, role)
-      VALUES (${data.clerkId}, ${data.name}, ${data.role})
-      RETURNING id, clerk_id, name, role, created_at
+      INSERT INTO users (name, email, password_hash, role)
+      VALUES (${data.name}, ${data.email}, ${data.passwordHash}, ${data.role})
+      RETURNING id, name, email, role
     `;
     return rows[0] as unknown as User;
   },
+
+  async deleteUser(id: string): Promise<void> {
+    await getSql()`DELETE FROM users WHERE id = ${id}`;
+  },
+
+  // ── Questions ────────────────────────────────────────────────────────────
 
   async getQuestions(): Promise<QuestionWithMeta[]> {
     const rows = await getSql()`
@@ -83,6 +108,8 @@ export const db = {
     `;
     return rows[0] as unknown as Question;
   },
+
+  // ── Stories ──────────────────────────────────────────────────────────────
 
   async getStoryByQuestionId(
     questionId: string

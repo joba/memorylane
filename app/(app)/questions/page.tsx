@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { requireAuth } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { QuestionCard } from "@/components/question-card";
 
 export default async function QuestionsPage() {
-  const user = await requireAuth();
+  const user = await getCurrentUser();
+  if (!user) return null;
   const questions = await db.getQuestions();
 
   const unanswered = questions.filter((q) => !q.has_story);

@@ -4,7 +4,13 @@
       "Bash(npx skills:*)",
       "Bash(npx:*)",
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(cp \"/Users/jonbagling/Documents/jobb/memory-lane/app/questions/[id]/page.tsx\" \"/Users/jonbagling/Documents/jobb/memory-lane/app/\\(app\\)/questions/[id]/page.tsx\")",
+      "Bash(cp \"/Users/jonbagling/Documents/jobb/memory-lane/app/questions/[id]/story/new/page.tsx\" \"/Users/jonbagling/Documents/jobb/memory-lane/app/\\(app\\)/questions/[id]/story/new/page.tsx\")",
+      "Bash(mkdir -p \"/Users/jonbagling/Documents/jobb/memory-lane/app/\\(app\\)/questions/[id]/story/new\")",
+      "Bash(cat \"/Users/jonbagling/Documents/jobb/memory-lane/app/\\(app\\)/questions/page.tsx\")",
+      "Bash(npm uninstall:*)",
+      "Bash(node:*)"
     ]
   }
 }
