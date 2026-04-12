@@ -7,10 +7,10 @@ import { db } from "@/lib/db";
 
 export async function createQuestion(
   _prevState: unknown,
-  formData: FormData
+  formData: FormData,
 ): Promise<{ error: string } | void> {
   const user = await getCurrentUser();
-  if (!user || user.role !== "QUESTIONER") {
+  if (!user || user.role === "ANSWERER") {
     return { error: "Behörighet saknas" };
   }
 

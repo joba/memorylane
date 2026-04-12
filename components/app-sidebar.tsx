@@ -3,13 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logout } from "@/actions/auth";
-import {
-  BookOpen,
-  Home,
-  LogOut,
-  PlusCircle,
-  ShieldCheck,
-} from "lucide-react";
+import { BookOpen, Home, LogOut, PlusCircle, ShieldCheck } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -36,7 +30,7 @@ export function AppSidebar({ name, role }: AppSidebarProps) {
   const mainNav = [
     { label: "Hem", href: "/", icon: Home },
     { label: "Alla frågor", href: "/questions", icon: BookOpen },
-    ...(role === "QUESTIONER"
+    ...(role === "QUESTIONER" || role === "ADMIN"
       ? [{ label: "Ställ en fråga", href: "/questions/new", icon: PlusCircle }]
       : []),
   ];

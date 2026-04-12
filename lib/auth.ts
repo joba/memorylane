@@ -16,9 +16,9 @@ export async function requireAuth(): Promise<User> {
   return user as User;
 }
 
-export async function requireRole(required: UserRole): Promise<User> {
+export async function requireRole(required: UserRole[]): Promise<User> {
   const user = await getCurrentUser();
-  if (!user || user.role !== required) {
+  if (!user || !required.includes(user.role)) {
     const { forbidden } = await import("next/navigation");
     forbidden();
   }
@@ -26,5 +26,5 @@ export async function requireRole(required: UserRole): Promise<User> {
 }
 
 export async function requireAdmin(): Promise<User> {
-  return requireRole("ADMIN");
+  return requireRole(["ADMIN"]);
 }
