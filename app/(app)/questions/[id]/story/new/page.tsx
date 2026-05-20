@@ -10,7 +10,7 @@ export default async function NewStoryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireRole("ANSWERER");
+  await requireRole(["ANSWERER"]);
 
   const question = await db.getQuestionById(id);
   if (!question) notFound();
